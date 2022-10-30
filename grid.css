@@ -57,7 +57,7 @@ Static {
     background: $panel;
 }
 
-#box1 {
+#submit {
     background: orange;
     layer: above;
     offset: 1 0;
@@ -123,17 +123,10 @@ Static {
     border-right: darkgoldenrod ascii;
 }
 
-#request-text {
-    padding-left: 1;
-    height: 5;
-    content-align: left bottom;
-}
-
 #vegetable {
     row-span: 2;
     background: $boost;
     border: whitesmoke round;
-
 }
 
 #quantity {
@@ -145,36 +138,27 @@ Static {
 #middle-pane {
     row-span: 6;
     background: $panel;
-
 }
 
-#one {
+#error {
+    height: 100%;
     color: red;
     border: red round;
-    visibility: hidden;
 }
 
-#int-error {
-    layer: above;
-    height: 6;
-    offset: 0 3;
-    color: red;
-    border: red round;
-    text-align: center;
-    visibility: hidden;
-}
-
-#two {
+#warning {
+    height: 100%;
     color: orange;
     border: orange round ;
-    visibility: hidden;
 }
 
-#three {
+
+#confirm {
+    height: 100%;
     color: seagreen;
     border:  seagreen round;
-    visibility: hidden;
 }
+
 
 #bottom-pane {
     column-span: 3;
@@ -191,3 +175,4 @@ Static {
     /* margin-bottom: 1; */
     /* padding: 1; */
 }
+
