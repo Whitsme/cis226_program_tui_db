@@ -1,0 +1,193 @@
+/* grid layout */
+Screen {
+    layers: below middle above;
+}
+
+Static {
+    content-align: center middle;
+}
+
+#sidebar {
+    dock: right;
+    width: 15;
+    height: 100%;
+    color: white;
+    background: darkgoldenrod;
+}
+
+#app-grid {
+    layout: grid;
+    grid-size: 3 4;  
+    grid-columns: 4fr 1fr;
+    background: $panel;
+    border: darkgoldenrod vkey;
+}
+
+#header > Static {
+    color: whitesmoke;
+    text-style: bold;
+}
+
+#header {
+    dock: top;
+    width: 100%;
+    column-span: 3;
+    background: darkgoldenrod;
+    height: 1;
+    align: center top;
+}
+
+#footer > Static {
+    color: whitesmoke;
+    text-style: bold;
+}
+
+#footer {
+    dock: bottom;
+    width: 100%;
+    column-span: 3;
+    background: darkgoldenrod;
+    height: 1;
+    align: center top;
+}
+
+#right-pane {
+    dock: right;
+    width: 15; 
+    background: $panel;
+}
+
+#box1 {
+    background: orange;
+    layer: above;
+    offset: 1 0;
+    height: 5;
+    content-align: center middle;
+    /* text-align: center; */
+    color: whitesmoke;
+}
+
+#box2 {
+    layer: below;
+    background: seagreen;
+    offset: 6 1;
+    width: 4;
+    height: 18;
+}
+
+#box3 {
+    layer: middle;
+    background: rgba(39, 55, 51, 0.199);
+    offset: 7 2;
+    width: 2;
+    height: 16;
+}
+
+#top-left {
+    row-span: 3;
+    layout: grid;
+    grid-size: 2;
+    grid-columns: 1fr;
+    grid-rows: 1fr;
+    background: $panel;
+}
+
+#insert {
+    height: 100%;
+    border: seagreen round;
+    content-align: center middle;
+}
+
+#select{
+    height: 100%;
+    border: seagreen round;
+    content-align: center middle;
+}
+
+#create {
+    width: 100%;
+    height: 100%;
+    border: seagreen round;
+    column-span: 3;
+}
+
+#top-right {
+    column-span: 2;
+    row-span: 3;
+    layout: grid;
+    grid-size: 1 10;
+    /* grid-columns: 1fr;
+    grid-rows: 1fr; */
+    background: $panel;
+    border-left: darkgoldenrod ascii;
+    border-right: darkgoldenrod ascii;
+}
+
+#request-text {
+    padding-left: 1;
+    height: 5;
+    content-align: left bottom;
+}
+
+#vegetable {
+    row-span: 2;
+    background: $boost;
+    border: whitesmoke round;
+
+}
+
+#quantity {
+    row-span: 2;
+    background: $boost;
+    border: whitesmoke round;
+}
+
+#middle-pane {
+    row-span: 6;
+    background: $panel;
+
+}
+
+#one {
+    color: red;
+    border: red round;
+    visibility: hidden;
+}
+
+#int-error {
+    layer: above;
+    height: 6;
+    offset: 0 3;
+    color: red;
+    border: red round;
+    text-align: center;
+    visibility: hidden;
+}
+
+#two {
+    color: orange;
+    border: orange round ;
+    visibility: hidden;
+}
+
+#three {
+    color: seagreen;
+    border:  seagreen round;
+    visibility: hidden;
+}
+
+#bottom-pane {
+    column-span: 3;
+    background: $panel;
+    border-top: darkgoldenrod ascii;
+    border-right: darkgoldenrod ascii;
+    /* border: darkgoldenrod double; */
+}
+
+#bottom-pane > Static {
+    /* width: 100%; */
+    background: $boost;
+    /* color: auto; */
+    /* margin-bottom: 1; */
+    /* padding: 1; */
+}
