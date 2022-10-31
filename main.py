@@ -5,21 +5,14 @@ CRN: 10235
 Class name: CIS 226: Advanced Python Programming
 Aprox time to complete: 15 hours
 """
-from signal import pause
-from tkinter import Widget
-from turtle import delay
+
 from textual.app import App, ComposeResult
-from textual.color import Color
-from textual.containers import Container, Horizontal, Vertical, Grid
-from textual.message import Message, MessageTarget
-from textual.reactive import reactive, var
-from textual.screen import Screen
-from textual.timer import Timer
+from textual.containers import Container, Horizontal, Vertical
 from textual.widgets import Static, Button, Input, DataTable
-from textual import events
+
 
 import sqlite3
-import time
+
 
 conn = sqlite3.connect(':memory:')
 c = conn.cursor()
@@ -37,10 +30,6 @@ OUTPUT: object = Static("No Vegetables Here!")
 VEGETABLE: object = Input(placeholder="Enter vegetable", id="vegetable")
 QUANTITY: object = Input(placeholder="Enter quantity", id="quantity")
 
-import sqlite3
-
-conn = sqlite3.connect(':memory:')
-c = conn.cursor()
 
 def setup() -> bool:
     # builds database
@@ -74,36 +63,8 @@ def select_vegetable(name, quantity) -> bool:
         ERROR.update(renderable=f"{name} not found!")
         return False
     else:
-        OUTPUT.update(renderable=f"{row[0]} found! {row[1]} in stock.")
+        OUTPUT.update(renderable=f"{row[1]} found! {row[0]} in stock.")
         return True
-    
-        
-
-def update_vegetable( name, quantity):
-    # updates vegetable name and/or quantity in database
-    found = select_vegetable(name, quantity)
-    if found:
-        c.execute("UPDATE vegetable SET quantity=? WHERE name=?", [quantity, name])
-    else:
-        CONFIRM.update(renderable=f"\nAdding {name} as a new vegetable.")
-        insert_vegetable(name, quantity)
-        c.execute("UPDATE vegetable SET quantity=? WHERE name=?", [quantity, name])
-        select_vegetable(name, quantity)
-
-def delete_vegetable(name, quantity):
-    # deletes vegetable from database
-    if select_vegetable(name, quantity):
-        found = c.execute("SELECT quantity, name FROM vegetable WHERE name=?", [name, ])
-        c.execute("DELETE FROM vegetable WHERE name=?", [name])
-        conn.commit()
-        CONFIRM.update(renderable=f"\n{name} deleted!")
-        
-def show_all():
-    # prints all vegetables in database
-    print("\nAll vegetables: quantities")
-    for row in c.execute("SELECT * FROM vegetable"):
-        DataTable.add_row(f"Vegetable = {row[0]}: Quantity = {row[1]}")
-
 
 def db_check() -> bool:
     # checks if database has been created
@@ -114,6 +75,7 @@ def db_check() -> bool:
         return False
 
 def display_error():
+    # changes visibility of messages
     if ERROR.display == False:
         if CONFIRM.display == True:
             CONFIRM.display = False
@@ -122,6 +84,7 @@ def display_error():
         ERROR.display = True
 
 def display_warning():
+    # changes visibility of messages
     if WARNING.display == False:
         if CONFIRM.display == True:
             CONFIRM.display = False
@@ -130,6 +93,7 @@ def display_warning():
         WARNING.display = True
 
 def display_confirm():
+    # changes visibility of messages
     if CONFIRM.display == False:
         if ERROR.display == True:
             ERROR.display = False
@@ -141,6 +105,7 @@ class TuiGrid(App):
     CSS_PATH = "grid.css"
 
     def compose(self) -> ComposeResult:
+        # builds and lays out the contents of the app
         yield Container(
                 Horizontal(
                     Static("Vegetable Stand"),
@@ -168,12 +133,13 @@ class TuiGrid(App):
                     id="app-grid",
                 ),
                 Horizontal(
-                    Static("@ 2022 AWW"),
+                    Static("@ 2022 Aaron Whitaker"),
                     id="footer",
                 ),
                 )
                 
     def on_mount(self):
+        # actions made when app is run
         ERROR.display = False
         WARNING.display = False
         CONFIRM.display = False
@@ -182,7 +148,11 @@ class TuiGrid(App):
         DataTable.display=False
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
+        # actions made when a button is pressed
         """buttons and their function calls etc"""
+
+        OUTPUT.update(renderable="No Vegetables Here!")
+
         button_id = event.button.id
 
         if button_id == "create":
@@ -196,28 +166,38 @@ class TuiGrid(App):
  
         elif button_id == "insert":
             if db_check() == True:
-                name = ""
-                quantity = 0
-                if VEGETABLE.value != "":
-                        name = VEGETABLE.value
-                else:
-                    ERROR.update(renderable="ERROR\n\nNo Vegetable Entered!")
+                # name = ""
+                # quantity = 0
+                try: 
+                    name = str(VEGETABLE.value)
+                    name != "" == True
+                    assert name
+                    CONFIRM.update(renderable=f"-{name}-")
+                    display_confirm()
+                except:
+                    ERROR.update(renderable="----->  ERROR  <-----\n\nNo Vegetable Entered!")
                     display_error()
-                if QUANTITY.value != "":
-                    quantity = VEGETABLE.value
-                else:
-                    ERROR.update(renderable="ERROR\n\nNo Quantity Entered!")
+                    return
+                try:
+                    quantity = int(QUANTITY.value)
+                except:
+                    ERROR.update(renderable="------->  ERROR  <-------\n\nInvalid Quantity Entered!")
                     display_error()
-                CONFIRM.update(renderable=f"\nAdding {name} as a new vegetable.")
+                    return
+                name = VEGETABLE.value
+                quantity = QUANTITY.value
                 if insert_vegetable(name, quantity) == True:
+                    CONFIRM.update(renderable=f"{quantity} {name} added to Vegetable Stand.")
                     display_confirm()
                 else:
+                    ERROR.update(renderable=f"----->  ERROR  <-----\n\n{name} not added to Vegetable Stand.")
                     display_error()
+                    return
             elif db_check() == False:
-                if ERROR.display == True:
-                    ERROR.display = False
                 ERROR.update(renderable="No Database Available!\nPlease create a database.")
                 display_error()
+            VEGETABLE.value=""
+            QUANTITY.value=""
 
         elif button_id == "select":
             if db_check() == True:
@@ -226,21 +206,24 @@ class TuiGrid(App):
                 else:
                     name = ""
                 quantity = 0
-                if VEGETABLE.value == "":
-                    if VEGETABLE.value == "":                    
-                        WARNING.update(renderable="WARNING\n\nEnter a quantity.")
+                try:
+                    assert name   
+                except:       
+                    WARNING.update(renderable="WARNING\n\nEnter a quantity.")
                     display_warning()
+                pad = len(name)
                 CONFIRM.update(renderable=f"Looking for a {name}...")
                 if select_vegetable(name, quantity) == True:
                     display_confirm()
                 else:
                     display_error()
-        
             elif db_check() == False:
                 if ERROR.display == True:
                     ERROR.display = False
                 ERROR.update(renderable="No Database Available!\nPlease create a database.")
                 display_error()
+            VEGETABLE.value=""
+            QUANTITY.value=""
 
 if __name__ == "__main__":
     app = TuiGrid(css_path="grid.css")
