@@ -7,6 +7,8 @@ Static {
     content-align: center middle;
 }
 
+
+
 #sidebar {
     dock: right;
     width: 15;
@@ -96,12 +98,14 @@ Static {
     height: 100%;
     border: seagreen round;
     content-align: center middle;
+    background: $panel;
 }
 
 #select{
     height: 100%;
     border: seagreen round;
     content-align: center middle;
+    background: $panel;
 }
 
 #create {
@@ -109,6 +113,7 @@ Static {
     height: 100%;
     border: seagreen round;
     column-span: 3;
+    background: $panel;
 }
 
 #top-right {
@@ -160,19 +165,16 @@ Static {
 }
 
 
-#bottom-pane {
+#output {
+    width: 100%;
+    height: 100%;
     column-span: 3;
     background: $panel;
     border-top: darkgoldenrod ascii;
     border-right: darkgoldenrod ascii;
-    /* border: darkgoldenrod double; */
 }
 
-#bottom-pane > Static {
-    /* width: 100%; */
+#output > Static {
+    height: 100%;
     background: $boost;
-    /* color: auto; */
-    /* margin-bottom: 1; */
-    /* padding: 1; */
 }
-
